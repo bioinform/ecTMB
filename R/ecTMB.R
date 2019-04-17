@@ -139,6 +139,7 @@ readData = function(mutf, exomef, covarf, mutContextf, ref, samplef= NULL){
     cat("Bed file is specified for samples\n")
     if(length(unique(samples$BED)) == 1){
       cat("\tAll samples have the same bed regions\n")
+      require(GenomicRanges)
       exomeGene = get_exomeGene(exome, Bed = unique(samples$BED), mutContext = mutContext)
       gid       = intersect(gid, exomeGene$gid)  ## need to update gid to bed file.
       MutBed    = data.frame(Chromosome = mafTable[, "Chromosome"],

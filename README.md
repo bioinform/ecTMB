@@ -34,9 +34,13 @@ devtools::install_github("bioinform/ecTMB");
 ## Download Example and Reference Data
 ```
 #Example file download from URL: https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1
-URL <- "https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1"
+URL = "https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1"
 download.file(URL,destfile = "ecTMB.example.tar.gz")
 untar("./ecTMB.example.tar.gz")
+
+URL_ref = "https://api.gdc.cancer.gov/data/254f697d-310d-4d7d-a27b-27fbf767a834"
+download.file(URL,destfile = "GRCh38.d1.vd1.fa.tar.gz")
+untar("./GRCh38.d1.vd1.fa.tar.gz")
 ```
 
 
@@ -50,7 +54,7 @@ exomef                 = file.path(extdataDir, "exome_hg38_vep.Rdata" )  #### hg
 covarf                 = file.path(extdataDir,"gene.covar.txt")   ### gene properties
 mutContextf            = file.path(extdataDir,"mutation_context_96.txt" )  ### 96 mutation contexts
 TST170_panel           = file.path(extdataDir,"TST170_DNA_targets_hg38.bed" )  ### 96 mutation contexts
-ref                    = file.path(extdataDir,"GRCh38.d1.vd1.fa" )
+ref                    = file.path("./","GRCh38.d1.vd1.fa" )
 
 ```
 * **Set random 70% as training and rest as test set**
@@ -88,7 +92,8 @@ trainedModel   = fit_model(trainset, MRtriProb_train, cores = 24)
 
 * **Predict TMB for TST170 panel**
 ```
-TMBs          = pred_TMB(testset_panel, WES = testset_WES,
+## process time less than 1s. 
+TMBs          <-  pred_TMB(testset_panel, WES = testset_WES, cores = 1,
                         params = trainedModel, mut.nonsil = T, gid_nonsil_p = trainset$get_nonsil_passengers(0.95))
                         
 ## plot the prediction.    
@@ -110,7 +115,7 @@ TMBs %>% melt(id.vars = c("sample","WES_TMB")) %>%
 
 * **Classify sample to 3 subtypes**
 ```
-Sutypes      = assignClass(TMBs$ecTMB_panel_TMB, prior = GMM_params)
+Subtypes      = assignClass(TMBs$ecTMB_panel_TMB, prior = GMM_params)
 ```
 
 ## License
