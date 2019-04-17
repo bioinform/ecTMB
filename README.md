@@ -9,6 +9,8 @@ ecTMB is a powerful and flexible statistical framework for TMB estimation and cl
 **[License](#license)**<br>
 
 ## Dependency
+ecTMB has been sucessfully tested on Intel(R) Xeon(R) CPU E5-2680 v4 Machine with 28 cores.
+
 ecTMB import following R packages: ggplot2, limma, reshape2, dplyr, R6, MASS, GenomicRanges, data.table, parallel, mixtools
 
 ecTMB also depends on bedtools 2.27.1 and R = 3.5.1
@@ -25,7 +27,7 @@ export LD_LIBRARY_PATH="/PATH/TO/CONDA/lib:$LD_LIBRARY_PATH"
 
 ## Installation
 ```
-install.packages(devtools)
+install.packages("devtools")
 library(devtools);
 devtools::install_github("bioinform/ecTMB");
 ```
