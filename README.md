@@ -31,7 +31,7 @@ devtools::install_github("bioinform/ecTMB");
 ```
 
 ## Example Usage
-* Load ecTMB package and genome annotation reference files
+* **Load ecTMB package and genome annotation reference files**
 ```
 library(ecTMB)
 load("./example/UCEC.rda")
@@ -43,14 +43,14 @@ TST170_panel           = file.path(extdataDir,"TST170_DNA_targets_hg38.bed" )  #
 ref                    = file.path(extdataDir,"GRCh38.d1.vd1.fa" )
 
 ```
-* Set random 70% as training and rest as test set
+* **Set random 70% as training and rest as test set**
 ```
 set.seed(1002200)
 SampleID_all   = UCEC_cli$sample
 SampleID_train = sample(SampleID_all, size = round(2 * length(SampleID_all)/3), replace = F)
 SampleID_test  = SampleID_all[!SampleID_all %in% SampleID_train]
 ```
-* Generate train and test data object
+* **Generate train and test data object**
 ```
 ## mutations which are inconsistent with reference annotation files will be removed.
 ## train data
@@ -63,7 +63,7 @@ testData       = UCEC_mafs[UCEC_mafs$Tumor_Sample_Barcode %in% as.character(Samp
 testset_panel  = readData(testData, exomef, covarf, mutContextf, ref, samplef = sample)
 testset_WES    = readData(testData, exomef, covarf, mutContextf, ref)  ## to calculate WES-TMB for test samples
 ```
-* Background mutation model training 
+* **Background mutation model training** 
 ---
 **NOTE**
 
@@ -76,7 +76,7 @@ MRtriProb_train= getBgMRtri(trainset)
 trainedModel   = fit_model(trainset, MRtriProb_train, cores = 24)
 ```
 
-* Predict TMB for TST170 panel.
+* **Predict TMB for TST170 panel**
 ```
 TMBs          = pred_TMB(testset_panel, WES = testset_WES,
                         params = trainedModel, mut.nonsil = T, gid_nonsil_p = trainset$get_nonsil_passengers(0.95))
@@ -98,7 +98,7 @@ TMBs %>% melt(id.vars = c("sample","WES_TMB")) %>%
   labs(x = "TMB defined by WES", y = sprintf("Predicted TMB from panel: TST170"))
 ```
 
-* Classify sample to 3 subtypes.
+* **Classify sample to 3 subtypes**
 ```
 Sutypes      = assignClass(TMBs$ecTMB_panel_TMB, prior = prior_bs)
 ```
