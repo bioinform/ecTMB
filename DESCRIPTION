@@ -1,0 +1,29 @@
+Package: ecTMB
+Type: Package
+Title: Esitmation and Classification of TMB
+Version: 0.1.0
+Author: Lijing Yao, Fu Yao
+Maintainer: The package maintainer <lijing.yao@roche.com>
+Description: ecTMB is a powerful and flexible statistical framework for TMB 
+    estimation and classification. It uses an explicit background mutation mdoel for 
+    more robust and consistent TMB prediction. The backgournd mutation model 
+    takes account of unknown as well as known mutational heterogeneous factors, 
+    including tri-nucleotide context, sample mutational burden, gene expression 
+    level and replication timing by utilization of a Bayesian framework. The discovery
+    of three TMB-based subtypes, including one novel subtype TMB-extreme, enable 
+    ecTMB to classify samples to biological and clinically relavent TMB subtypes.
+Imports: ggplot2,
+        limma,
+        reshape2,
+        dplyr,
+        R6,
+        MASS,
+        GenomicRanges,
+        data.table,
+        parallel,
+        mixtools
+License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1.9000
+Suggests: maftools
