@@ -93,7 +93,7 @@ trainedModel   = fit_model(trainset, MRtriProb_train, cores = 24)
 * **Predict TMB for TST170 panel**
 ```
 ## process time less than 1s. 
-TMBs          <-  pred_TMB(testset_panel, WES = testset_WES, cores = 1,
+TMBs          =  pred_TMB(testset_panel, WES = testset_WES, cores = 1,
                         params = trainedModel, mut.nonsil = T, gid_nonsil_p = trainset$get_nonsil_passengers(0.95))
                         
 ## plot the prediction.    
