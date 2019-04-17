@@ -110,7 +110,7 @@ TMBs %>% melt(id.vars = c("sample","WES_TMB")) %>%
 
 * **Classify sample to 3 subtypes**
 ```
-Sutypes      = assignClass(TMBs$ecTMB_panel_TMB, prior = prior_bs)
+Sutypes      = assignClass(TMBs$ecTMB_panel_TMB, prior = GMM_params)
 ```
 
 ## License
