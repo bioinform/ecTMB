@@ -29,13 +29,21 @@ install.packages(devtools)
 library(devtools);
 devtools::install_github("bioinform/ecTMB");
 ```
+## Download Example and Reference Data
+```
+#Example file download from URL: https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1
+URL <- "https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1"
+download.file(URL,destfile = "ecTMB.example.tar.gz")
+untar("./ecTMB.example.tar.gz")
+```
+
 
 ## Example Usage
 * **Load ecTMB package and genome annotation reference files**
 ```
 library(ecTMB)
-load("./example/UCEC.rda")
-extdataDir             = "./references"
+load("./ecTMB_data/example/UCEC.rda")
+extdataDir             = "./ecTMB_data/references"
 exomef                 = file.path(extdataDir, "exome_hg38_vep.Rdata" )  #### hg38 exome file
 covarf                 = file.path(extdataDir,"gene.covar.txt")   ### gene properties
 mutContextf            = file.path(extdataDir,"mutation_context_96.txt" )  ### 96 mutation contexts
