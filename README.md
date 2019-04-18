@@ -34,7 +34,7 @@ devtools::install_github("bioinform/ecTMB");
 ## Download Example and Reference Data
 ```
 #Example file download from URL: https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1
-URL = "https://www.dropbox.com/s/knpgl73samhdtvg/ecTMB_data.tar.gz?dl=1"
+URL = "https://github.com/bioinform/ecTMB/releases/download/v0.1.0/ecTMB_data.tar.gz"
 download.file(URL,destfile = "ecTMB.example.tar.gz")
 untar("./ecTMB.example.tar.gz")
 
