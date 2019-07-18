@@ -354,20 +354,20 @@ CalTMB = function(x, type = "all", sampleN = NULL){
     sampleN   = as.character(x$samples$SampleID)
   }
   if(type == "all"){
-    out         = count_Mut(x$mut)
+    out         = count_Mut(x$mut, sampleN = sampleN)
   }else if(type == "sil" ){
-    out         = count_Mut(x$silent())
+    out         = count_Mut(x$silent(), sampleN = sampleN)
   }else if(type == "nonsil"){
-    out         = count_Mut(x$nonsilent())
+    out         = count_Mut(x$nonsilent(),  sampleN = sampleN)
   }else if(type == "indel"){
     mut         = x$nonsilent()
-    out         = count_Mut(mut[mut$Variant_Classification %in% c("Frame_Shift_Del", "Frame_Shift_Ins"),])
+    out         = count_Mut(mut[mut$Variant_Classification %in% c("Frame_Shift_Del", "Frame_Shift_Ins"),],  sampleN = sampleN)
   }else if(type == "snp"){
     mut         = x$nonsilent()
-    out         = count_Mut(mut[mut$Variant_Type %in% c("SNP"),])
+    out         = count_Mut(mut[mut$Variant_Type %in% c("SNP"),],  sampleN = sampleN)
   }else if(type == "frameshift"){
     mut         = x$nonsilent()
-    out         = count_Mut(mut[mut$Variant_Type %in% c("Frame_shift"),])
+    out         = count_Mut(mut[mut$Variant_Type %in% c("Frame_shift"),], sampleN = sampleN)
   }else{
     stop("type must be either all, sil or nonsil")
   }
