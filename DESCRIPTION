@@ -1,7 +1,7 @@
 Package: ecTMB
 Type: Package
 Title: Esitmation and Classification of TMB
-Version: 0.1.0
+Version: 0.1.1
 Author: Lijing Yao, Fu Yao
 Maintainer: The package maintainer <lijing.yao@roche.com>
 Description: ecTMB is a powerful and flexible statistical framework for TMB 
