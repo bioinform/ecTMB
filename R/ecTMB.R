@@ -79,7 +79,7 @@ MutSet = R6::R6Class(
 #' @param ref Path to reference genome
 #' @export
 #' @return a MutSet
-readData = function(mutf, exomef, covarf, mutContextf, ref, samplef= NULL){
+readData = function(mutf, exomef, covarf, mutContextf, ref, samplef= NULL, includeincon = FALSE){
   # load mutation context file
   mutContext            = read.table(mutContextf)
   colnames(mutContext)  = c("triMut", "rev_triMut", "triMut_code", "rev_triMut_code", "tag")
@@ -94,18 +94,22 @@ readData = function(mutf, exomef, covarf, mutContextf, ref, samplef= NULL){
   colnames(exome)      = c("Chromosome","pos", "seq_code","A", "C", "G", "T","gid", "aa_pos");
 
 
+
   # get valide gid
-  gid                  = intersect(rownames(covar)[covar$Chromosome %in% c(1:22,"X")],exome$gid)
+  gid                  = intersect(rownames(covar)[covar$Chromosome %in% paste0("chr",c(1:22,"X", "Y"))],exome$gid)
 
 
   # read in maf file
   mafTable             = mafCleanup(mutf, gid = gid)
   mafTable             = retrieve_context(mafTable, ref)
   mafTable$tag         = mutContext[match(mafTable[,"Context"],mutContext[,"triMut_code"]),"tag"]
-
   # remove inconsistant annotation
   inconMut             = Get_incon_mut(mafTable, exome)
   cat(sprintf("Number of inconsistant annotation mutation: %s out of total %s mutation \n",sum(inconMut), length(inconMut)))
+  # if(includeincon){
+  #   cat("include the inconsistant mutations")
+
+  # }
   incosistantAnno      = mafTable[inconMut, ]
   mafTable             = mafTable[!inconMut, ]
 
