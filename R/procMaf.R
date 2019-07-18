@@ -28,10 +28,8 @@ mafCleanup = function(maf, extraCols = NULL, keepNoncoding = FALSE,
   ## variant classification category--------
   if(is.null(nonSilTypes)){
     nonSilTypes = c("Missense_Mutation","Nonsense_Mutation",
-                    "Splice_Site","Frame_Shift_Del","Frame_Shift_Ins",
-                    "In_Frame_Ins","In_Frame_Del","Nonstop_Mutation",
-                    "Translation_Start_Site","De_novo_Start_InFrame",
-                    "De_novo_Start_OutOfFrame")
+                    "Frame_Shift_Del","Frame_Shift_Ins",
+                    "In_Frame_Ins","In_Frame_Del")
   }
 
   if(is.null(SilTypes)){
@@ -39,7 +37,8 @@ mafCleanup = function(maf, extraCols = NULL, keepNoncoding = FALSE,
   }
 
   if(is.null(ncTypes)){
-    ncTypes = c("3'Flank",  "3'UTR", "5'Flank",  "5'UTR", "IGR", "Intron", "Splice_Region", "RNA")
+    ncTypes = c("3'Flank",  "3'UTR", "5'Flank",  "5'UTR", "IGR", "Intron", "Splice_Region", "RNA", "Nonstop_Mutation",
+                  "Translation_Start_Site","De_novo_Start_InFrame", "De_novo_Start_OutOfFrame", "Splice_Site")
   }
 
   ## load file  ---------
@@ -60,9 +59,9 @@ mafCleanup = function(maf, extraCols = NULL, keepNoncoding = FALSE,
 
   ## sanity check -----
   ### Silent variant should not be INDEL
-  if(any( mafTable[,classInd] %in% c("Silent") & mafTable[,typeInd] %in% c("INS", "DEL") ) ){
-    stop("Maf file contain variants which are silent but belong to INDEL in type. Please double check maf file.")
-  }
+#  if(any( mafTable[,classInd] %in% c("Silent") & mafTable[,typeInd] %in% c("INS", "DEL") ) ){
+#    stop("Maf file contain variants which are silent but belong to INDEL in type. Please double check maf file.")
+#  }
 
   ### "De_novo_Start_InFrame", "De_novo_Start_OutOfFrame" are not longer allowed. Just a warning
   if(any( mafTable[,classInd] %in% c("De_novo_Start_InFrame", "De_novo_Start_OutOfFrame")  ) ){
@@ -188,6 +187,7 @@ maf_dnp_converter = function(mutab){
   mutab.dnp= mutab.tnp=mutab.onp=NULL
   if(sum(mutab[,"Variant_Type"]=="DNP")>0){
     mutab.dnp=  (as.matrix(mutab[ mutab[,"Variant_Type"]=="DNP" ,]))
+    print(head(mutab.dnp))
     if (sum(mutab[,"Variant_Type"]=="DNP")==1) {mutab.dnp=  t(as.matrix(mutab[ mutab[,"Variant_Type"]=="DNP" ,])) }
     #### convert DNP to SNP ##############
     a= matrix(0, nrow= nrow(mutab.dnp)*2,ncol=ncol(mutab.dnp)   )
@@ -216,8 +216,8 @@ maf_dnp_converter = function(mutab){
     #### convert TNP to SNP ##############
     a=matrix(0, nrow= nrow(mutab.tnp)*3,ncol=ncol(mutab.tnp)   )
     colnames(a)=colnames(mutab)
-    for(i in c(1,2,5,9:ncol(mutab.dnp))){
-      a[,i]=  rep(mutab.dnp[,i] ,each=3)
+    for(i in c(1,2,5,9:ncol(mutab.tnp))){
+      a[,i]=  rep(mutab.tnp[,i] ,each=3)
     }
     # a[,1]=  rep(mutab.tnp[,1] ,each=3)
     # a[,2]=  rep(mutab.tnp[,2] ,each=3)
@@ -245,14 +245,15 @@ maf_dnp_converter = function(mutab){
                           nchar(mutab.onp.all[,"Tumor_Seq_Allele1"]),
                           nchar(mutab.onp.all[,"Tumor_Seq_Allele2"])),1,max)
     umaxchar = unique(maxchar)
+    mutab.onp = mutab.onp.all
     b = NULL
     for (k in 1:length(umaxchar)){
       mutab.onp = mutab.onp.all[maxchar==umaxchar[k],]
       if (length(mutab.onp) == 8){mutab.onp = t(as.matrix(mutab.onp))}
       a= matrix(0, nrow= nrow(mutab.onp)*umaxchar[k],ncol=ncol(mutab.onp)   )
       colnames(a)=colnames(mutab)
-      for(i in c(1,2,5,9:ncol(mutab.dnp))){
-        a[,i]=  rep(mutab.dnp[,i] ,each=umaxchar[k])
+      for(i in c(1,2,5,9:ncol(mutab.onp))){
+        a[,i]=  rep(mutab.onp[,i] ,each=umaxchar[k])
       }
       # a[,1]=  rep(mutab.onp[,1] ,each=umaxchar[k])
       # a[,2]=  rep(mutab.onp[,2] ,each=umaxchar[k])
@@ -302,6 +303,7 @@ maf_dnp_converter = function(mutab){
 retrieve_context = function(mutab, ref){
   outDir = "./"
   if(!all(grepl("chr", mutab$Chromosome))){mutab$Chromosome = paste0("chr", mutab$Chromosome)}
+
   code = file.path(system.file( "perl", package="ecTMB"), "Sequence_Retrieve.pl")
   muttmpfile = tempfile(c("mutab"), tmpdir =outDir, fileext = ".tsv" )
 
@@ -315,8 +317,8 @@ retrieve_context = function(mutab, ref){
   cmd = sprintf(" rm %s %s", muttmpfile , sub(".tsv", "out.tsv", muttmpfile))
   system(cmd)
 
-  if(all(grepl("chr", out[,"Chromosome"]))){
-    out[,"Chromosome"] = sub("chr", "", out[,"Chromosome"])
+  if(!all(grepl("chr", out[,"Chromosome"]))){
+    out[,"Chromosome"] = paste0("chr", out[,"Chromosome"])
   }
   return(out)
 }
