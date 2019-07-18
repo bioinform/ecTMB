@@ -35,7 +35,14 @@ loadfile = function(x){
 OverLap = function(Bed, regions, base0 = FALSE){
   if(class(regions) == "character"){
     if(grepl(".bed$", regions)){
-      regions      = makeGRangesFromDataFrame(read.delim(regions, stringsAsFactors = F),
+      header = system(sprintf("head -n 1 %s", regions), intern = TRUE)
+      if(grepl("Start", header)){
+        df = read.delim(regions, stringsAsFactors = F)
+      }else{
+        df = read.delim(regions, stringsAsFactors = F, header = FALSE)[,1:3]
+        colnames(df) = c("Chromosome", "Start", "End")
+      }
+      regions      = makeGRangesFromDataFrame(df,
                                               keep.extra.columns=FALSE,
                                               ignore.strand=TRUE,
                                               start.field="Start",
@@ -232,7 +239,7 @@ get_glen = function(exomeGene, selGid = NULL, byGene= FALSE){
 #' @description  get background gene muation probabilty without regression
 #' @param exomeGene data.frame
 #' @param prob probability of each tri-nucleotides mutation context
-#' @param consequences default is c(1,2,3,4,5) which are nonsil mutation.
+#' @param consequences default is 1 which are nonsil mutation.
 #' @param gid Gene ID list.
 #' @importFrom data.table data.table setkey
 #' @export
@@ -297,7 +304,7 @@ checkMutC = function(sample, mut){
   if(!all(unique(sample$SampleID) %in% mut$Tumor_Sample_Barcode)){
     cat(sprintf("Total %s out of %s samples with at least one mutation detected.\nOnly the ones with at least one mutation will be used.\n",
                      length(unique(mut$Tumor_Sample_Barcode)), length(unique(sample$SampleID))))
-    sample                = sample[sample$SampleID %in% mut$Tumor_Sample_Barcode,]
+    # sample                = sample[sample$SampleID %in% mut$Tumor_Sample_Barcode,]
   }
   return(sample)
 }
