@@ -54,6 +54,11 @@ mafCleanup = function(maf, extraCols = NULL, keepNoncoding = FALSE,
 
   mafTable     = as.matrix(apply(mafTable,2,as.character))
   mafTable     = mafTable[!is.na(mafTable[,"Chromosome"]),] #### remove positions without chromosome info.
+  if( sum(mafTable[, "FILTER"] %in% c("PASS", ".")) != nrow(mafTable)) {
+	print("Need to remove non-PASS calls")
+	print(table(mafTable[, "FILTER"]))
+	mafTable     = mafTable[mafTable[, "FILTER"] == "PASS",]  #### Only use pass calls.
+  }
   typeInd      = which(colnames(mafTable)=="Variant_Type")
   classInd     = which(colnames(mafTable)=="Variant_Classification")
 
