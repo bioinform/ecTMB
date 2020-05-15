@@ -86,7 +86,8 @@ readData = function(mutf, exomef, covarf, mutContextf, ref, samplef= NULL, inclu
 
   # load covariant file
   covar                 = read.table(covarf, header=T, row.names=2, sep="\t")
-
+  if(all(!grepl('chr',covar$Chromosome))) covar$Chromosome = paste0("chr", covar$Chromosome)  ## fix encounter old covar file.
+  
   # load exome file
   ## format of exome file
   ## pos <\t> tri-nucleotide<\t>A <\t> C <\t> G <\t> T <\t> gene <\t> amino_acid_pos/protein_length
