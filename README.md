@@ -39,7 +39,7 @@ download.file(URL,destfile = "ecTMB.example.tar.gz")
 untar("./ecTMB.example.tar.gz")
 
 URL_ref = "https://api.gdc.cancer.gov/data/254f697d-310d-4d7d-a27b-27fbf767a834"
-download.file(URL,destfile = "GRCh38.d1.vd1.fa.tar.gz")
+download.file(URL_ref,destfile = "GRCh38.d1.vd1.fa.tar.gz")
 untar("./GRCh38.d1.vd1.fa.tar.gz")
 ```
 
