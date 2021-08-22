@@ -411,9 +411,9 @@ fit_model = function(Data, MRtriProb, method = "NB", cores = 1,  bs.type = "nons
 
   # count number of mutation per patient for offset calculation
   if(bs.type == "all"){
-    mutPerP          = CalTMB(trainset, sampleN = as.character(trainset$samples$SampleID))
+    mutPerP          = CalTMB(Data, sampleN = as.character(Data$samples$SampleID))
   }else if(bs.type == "nonsil"){
-    mutPerP          = CalTMB(trainset, sampleN = as.character(trainset$samples$SampleID), type = "nonsil")
+    mutPerP          = CalTMB(Data, sampleN = as.character(Data$samples$SampleID), type = "nonsil")
   }
   # for all genes with silent mutations
   gid                = Data$gid
